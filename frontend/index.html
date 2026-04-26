@@ -28,7 +28,7 @@
         async function cargarHabitaciones() {
             try {
                 // OJO: Por ahora usamos localhost. Cuando despleguemos el backend, cambiaremos esta URL.
-                const respuesta = await fetch('http://localhost:5000/api/rooms');
+                const respuesta = await fetch('https://hotel-final-j681.onrender.com/api/rooms');
                 const datos = await respuesta.json();
                 
                 const contenedor = document.getElementById('grid-habitaciones');
