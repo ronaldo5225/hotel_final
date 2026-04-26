@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Ronaldo - Reservas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <nav class="bg-blue-600 p-4 text-white shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold italic">🏨 Hotel Pro - Ronaldo</h1>
+            <span class="text-sm bg-blue-700 px-3 py-1 rounded-full">Frontend en Vercel</span>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6">Habitaciones Disponibles</h2>
+        
+        <div id="grid-habitaciones" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <p class="text-gray-500">Conectando con el servidor...</p>
+        </div>
+    </main>
+
+    <script>
+        // Función para traer los datos
+        async function cargarHabitaciones() {
+            try {
+                // OJO: Por ahora usamos localhost. Cuando despleguemos el backend, cambiaremos esta URL.
+                const respuesta = await fetch('http://localhost:5000/api/rooms');
+                const datos = await respuesta.json();
+                
+                const contenedor = document.getElementById('grid-habitaciones');
+                contenedor.innerHTML = ""; // Limpiar el mensaje de carga
+
+                datos.forEach(hab => {
+                    contenedor.innerHTML += `
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-gray-200">
+                            <div class="p-5">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-xl font-bold text-gray-900">Habitación ${hab.number}</h3>
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">${hab.type}</span>
+                                </div>
+                                <p class="text-gray-600 mt-2 italic">${hab.description || 'Sin descripción disponible'}</p>
+                                <div class="mt-4 flex justify-between items-center">
+                                    <span class="text-2xl font-extrabold text-blue-600">$${hab.price.toLocaleString()}</span>
+                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                        Reservar ahora
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('grid-habitaciones').innerHTML = 
+                    '<p class="text-red-500">❌ Error: Asegúrate de que el servidor (node server.js) esté encendido.</p>';
+            }
+        }
+
+        // Ejecutar al cargar la página
+        cargarHabitaciones();
+    </script>
+</body>
+</html>
