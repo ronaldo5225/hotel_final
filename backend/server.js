@@ -1,42 +1,44 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const cors = require('cors');
-require('dotenv').config();
+
+// Cargar variables de entorno
+dotenv.config();
 
 const app = express();
 
-// Middlewares
-app.use(cors()); 
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Importar el modelo de Habitación que ya tienes
-const Room = require('./models/Room');
+// Importar rutas
+const bookingRoutes = require('./routes/bookingRoutes');
+const roomRoutes = require('./routes/roomRoutes');
 
-// --- RUTAS DE LA API ---
-
-// 1. Ruta de bienvenida
-app.get('/', (req, res) => {
-  res.send('🏨 API del Hotel funcionando correctamente');
-});
-
-// 2. Obtener todas las habitaciones (Esta la usará tu Frontend)
-app.get('/api/rooms', async (req, res) => {
+// Conexión a MongoDB
+const connectDB = async () => {
   try {
-    const rooms = await Room.find();
-    res.json(rooms);
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ MongoDB conectado exitosamente');
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener datos", error });
+console.error('❌ ERROR COMPLETO:', error);
+    process.exit(1);
   }
+};
+
+connectDB();
+
+// Rutas
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/rooms', roomRoutes);
+
+// Ruta de prueba
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API funcionando correctamente' });
 });
 
-// Conexión a MongoDB Atlas
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ Servidor conectado a MongoDB Atlas'))
-  .catch(err => console.error('❌ Error de conexión:', err));
-
-// Puerto dinámico para despliegue
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
-
