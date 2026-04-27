@@ -3,300 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Pro - Encuentra tu estancia ideal</title>
+    <title>trivago | Comparador de hoteles</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome para el ícono de corazón -->
+    <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .heart-active { color: #e53e3e; }
-        .heart-inactive { color: #cbd5e0; }
-        .heart-hover:hover { transform: scale(1.1); transition: transform 0.2s; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #F3F4F6; }
+        
+        /* Estilos personalizados para imitar la calidad de trivago */
+        .search-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .heart-active { color: #ef4444; }
+        .heart-inactive { color: #9ca3af; }
+        .heart-hover:hover { transform: scale(1.1); transition: transform 0.2s ease; }
+        .hotel-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .hotel-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        }
+        .offer-button {
+            transition: all 0.2s ease;
+        }
+        .offer-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body>
 
-    <nav class="bg-white border-b border-gray-200 py-4 px-6 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-3">
-            <div class="flex items-center gap-2">
-                <span class="text-3xl font-black tracking-tighter">
+    <!-- Barra de Navegación Superior (Navbar) -->
+    <nav class="bg-white border-b border-gray-200 py-3 px-4 md:px-8 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo Trivago Replica -->
+            <div class="flex items-center space-x-1">
+                <span class="text-3xl font-black tracking-tight">
                     <span class="text-blue-600">tri</span><span class="text-orange-500">va</span><span class="text-red-500">go</span>
                 </span>
-                <span class="text-xs font-bold text-gray-400 ml-2 uppercase tracking-widest border-l pl-2 border-gray-300">Hotel Pro</span>
+                <span class="text-gray-400 text-xs font-medium border-l pl-2 ml-1 border-gray-300">Hotel Pro</span>
             </div>
-            <div class="flex gap-4 items-center">
-                <button id="btnFavoritos" class="text-sm font-semibold text-gray-600 hover:text-blue-600 transition">
-                    <i class="fas fa-heart mr-1 text-red-500"></i> Favoritos
+            <!-- Acciones del Usuario -->
+            <div class="flex items-center gap-4">
+                <button id="btnFavoritosUI" class="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-blue-600 transition px-3 py-2 rounded-full hover:bg-gray-50">
+                    <i class="far fa-heart text-red-400"></i> <span>Favoritos</span>
+                    <span id="favCounterBadge" class="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1 hidden">0</span>
                 </button>
-                <button id="btnLogin" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-md">
-                    <i class="fas fa-sign-in-alt mr-1"></i> Iniciar sesión
+                <button id="btnLoginUI" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm flex items-center gap-2">
+                    <i class="fas fa-user-circle"></i> Iniciar sesión
                 </button>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto p-4 md:p-8">
+    <!-- Contenedor Principal -->
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-6">
         
-        <!-- Barra de búsqueda mejorada -->
-        <div class="bg-white p-2 rounded-xl shadow-lg border border-gray-100 flex flex-col md:flex-row gap-2 mb-10 mt-[-20px] md:mt-[-40px] relative z-10">
-            <div class="flex-1 p-3 border-r border-gray-100">
-                <label class="block text-[10px] uppercase font-bold text-gray-400">Destino</label>
-                <input type="text" id="destinoInput" placeholder="¿A dónde vas?" class="w-full outline-none font-semibold text-gray-700" value="Popayán, Colombia">
+        <!-- Buscador Principal (Inspirado en trivago) -->
+        <div class="bg-white rounded-2xl search-shadow border border-gray-200 mb-10 -mt-3 relative z-20">
+            <div class="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-gray-200">
+                <!-- Campo Destino -->
+                <div class="flex-1 p-4">
+                    <label class="block text-xs uppercase font-bold text-gray-500 mb-1">Destino</label>
+                    <input type="text" id="destinoInput" placeholder="¿A dónde vas? Ciudad, hotel, región..." class="w-full outline-none font-semibold text-gray-800 text-lg bg-transparent" value="Popayán, Colombia">
+                </div>
+                <!-- Campo Fechas (Placeholder visual) -->
+                <div class="flex-1 p-4">
+                    <label class="block text-xs uppercase font-bold text-gray-500 mb-1">Fechas</label>
+                    <div class="flex items-center text-gray-600 font-medium"> 📅 26 abr - 27 abr <span class="ml-2 text-gray-400 text-sm">(2 noches)</span></div>
+                </div>
+                <!-- Botón Buscar -->
+                <div class="md:w-auto flex items-stretch">
+                    <button id="btnBuscarPrincipal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-b-2xl md:rounded-r-2xl md:rounded-l-none w-full transition-all text-lg">
+                        Buscar <i class="fas fa-search ml-2"></i>
+                    </button>
+                </div>
             </div>
-            <div class="flex-1 p-3 border-r border-gray-100">
-                <label class="block text-[10px] uppercase font-bold text-gray-400">Fechas</label>
-                <p class="font-semibold text-gray-700">Seleccionar fechas</p>
-            </div>
-            <button id="btnBuscar" class="bg-blue-600 text-white px-10 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition">Buscar</button>
         </div>
 
-        <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
-            <h2 class="text-2xl font-extrabold flex items-center gap-2">
-                Resultados de búsqueda
-                <span class="text-sm font-normal text-gray-400 bg-gray-100 px-2 py-1 rounded">Basado en disponibilidad real</span>
-            </h2>
-            <div id="favCounter" class="text-sm bg-white px-3 py-1 rounded-full shadow-sm text-gray-600 hidden">
-                <i class="fas fa-heart text-red-500 mr-1"></i> <span>0</span> favoritos
+        <!-- Encabezado de Resultados + Control de Vista -->
+        <div class="flex flex-wrap justify-between items-center mb-6 gap-3">
+            <div class="flex items-center gap-3">
+                <h2 class="text-2xl font-extrabold text-gray-900">Dónde quedarse en Popayán</h2>
+                <span class="bg-gray-200 text-gray-600 text-sm px-3 py-1 rounded-full font-medium">132 alojamientos encontrados</span>
+            </div>
+            <div class="flex gap-2 text-sm">
+                <button class="px-4 py-2 rounded-full bg-white border border-gray-300 font-medium text-gray-700 hover:shadow-sm transition">Recomendados</button>
+                <button class="px-4 py-2 rounded-full bg-white border border-gray-300 font-medium text-gray-700 hover:shadow-sm transition">Menor precio</button>
+                <button class="px-4 py-2 rounded-full bg-white border border-gray-300 font-medium text-gray-700 hover:shadow-sm transition">Puntuación</button>
             </div>
         </div>
 
-        <div id="grid-habitaciones" class="flex flex-col gap-6">
-            <div class="flex flex-col items-center justify-center py-20 text-gray-400">
-                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mb-4"></div>
-                <p>Buscando las mejores ofertas en tiempo real...</p>
+        <!-- Grid / Lista de Resultados (Tarjetas estilo trivago) -->
+        <div id="grid-resultados" class="flex flex-col gap-6">
+            <!-- Loader visual mientras se cargan los datos -->
+            <div class="flex flex-col items-center justify-center py-20 text-gray-400 bg-white rounded-2xl shadow-sm">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+                <p class="font-medium">Buscando las mejores ofertas en tiempo real...</p>
+                <p class="text-sm text-gray-400 mt-1">Conectando con más de 100 sitios de reserva</p>
             </div>
         </div>
     </main>
 
     <script>
-        // ---------- CONFIGURACIÓN ----------
-        const API_BASE = 'https://hotel-final-j681.onrender.com/api';
-        let allRooms = [];           // Todos los hoteles desde el backend
-        let favoriteIds = [];        // IDs de hoteles favoritos
-        let showOnlyFavs = false;    // ¿Mostrar solo favoritos?
-        let currentUser = null;      // Usuario logueado (simulación)
-        let currentFilterText = "";  // Texto del buscador
-
+        // ################ CONFIGURACIÓN INICIAL ################
+        // 🔗 URL de tu BACKEND (Asegúrate de que Render esté activo)
+        const API_URL = 'https://hotel-final-j681.onrender.com/api';
+        
+        // Variables de Estado Global
+        let allHotelsData = [];          // Array con todos los hoteles desde la API
+        let favoriteIds = [];            // Array de IDs favoritos
+        let showOnlyFavorites = false;   // Modo "Mostrar solo favoritos"
+        let currentUser = null;          // Usuario actual (simulación de sesión)
+        let currentSearchTerm = "Popayán, Colombia"; // Término actual de búsqueda (simulado)
+        
         // Elementos del DOM
-        const gridContainer = document.getElementById('grid-habitaciones');
-        const destinoInput = document.getElementById('destinoInput');
-        const btnBuscar = document.getElementById('btnBuscar');
-        const btnFavoritos = document.getElementById('btnFavoritos');
-        const btnLogin = document.getElementById('btnLogin');
-        const favCounterSpan = document.querySelector('#favCounter span');
+        const resultadosContainer = document.getElementById('grid-resultados');
+        const searchInput = document.getElementById('destinoInput');
+        const searchButton = document.getElementById('btnBuscarPrincipal');
+        const favButtonUI = document.getElementById('btnFavoritosUI');
+        const loginButtonUI = document.getElementById('btnLoginUI');
+        const favCounterSpan = document.getElementById('favCounterBadge');
 
-        // ---------- FUNCIONES AUXILIARES ----------
-        function loadFavoritesFromLocalStorage() {
-            const stored = localStorage.getItem('hotelFavorites');
+        // ################ FUNCIONES AUXILIARES ################
+        // Guardar favoritos en localStorage
+        function saveFavorites() {
+            localStorage.setItem('hotelFavoritesApp', JSON.stringify(favoriteIds));
+            updateFavoriteBadge();
+        }
+
+        // Cargar favoritos del localStorage
+        function loadFavorites() {
+            const stored = localStorage.getItem('hotelFavoritesApp');
             if (stored) {
                 favoriteIds = JSON.parse(stored);
             } else {
                 favoriteIds = [];
             }
-            updateFavCounter();
+            updateFavoriteBadge();
         }
 
-        function saveFavoritesToLocalStorage() {
-            localStorage.setItem('hotelFavorites', JSON.stringify(favoriteIds));
-            updateFavCounter();
-        }
-
-        function updateFavCounter() {
-            const counterEl = document.getElementById('favCounter');
+        // Actualizar el contador visual de favoritos en el navbar
+        function updateFavoriteBadge() {
             if (favoriteIds.length > 0) {
-                counterEl.classList.remove('hidden');
-                if (favCounterSpan) favCounterSpan.innerText = favoriteIds.length;
+                favCounterSpan.innerText = favoriteIds.length;
+                favCounterSpan.classList.remove('hidden');
             } else {
-                counterEl.classList.add('hidden');
+                favCounterSpan.classList.add('hidden');
             }
-            // Si estamos en modo "solo favoritos" y no hay favoritos, mostrar mensaje
-            if (showOnlyFavs && favoriteIds.length === 0) {
-                renderizarHoteles();
-            } else if (showOnlyFavs) {
-                renderizarHoteles(); // re-renderiza para aplicar filtro
-            } else {
-                renderizarHoteles(); // re-renderiza por si cambió el contador visual
+            // Si estamos en modo favoritos, refrescamos la vista al cambiar los favoritos
+            if (showOnlyFavorites) {
+                renderHotels();
+            } else if (!showOnlyFavorites) {
+                renderHotels(); // Refresca para actualizar los iconos de corazón
             }
         }
 
-        function toggleFavorito(roomId) {
+        // Agregar o quitar de favoritos
+        function toggleFavorite(roomId) {
             const index = favoriteIds.indexOf(roomId);
             if (index === -1) {
                 favoriteIds.push(roomId);
             } else {
                 favoriteIds.splice(index, 1);
             }
-            saveFavoritesToLocalStorage();
+            saveFavorites();
         }
 
-        function isFavorito(roomId) {
+        // Verificar si un hotel es favorito
+        function isFavorite(roomId) {
             return favoriteIds.includes(roomId);
         }
 
-        // Simular login/logout
+        // Simular Inicio / Cierre de sesión
         function handleLogin() {
             if (currentUser) {
                 // Cerrar sesión
                 currentUser = null;
-                localStorage.removeItem('hotelUser');
-                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt mr-1"></i> Iniciar sesión';
-                alert('Sesión cerrada');
+                localStorage.removeItem('trivago_user_sim');
+                loginButtonUI.innerHTML = '<i class="fas fa-user-circle"></i> Iniciar sesión';
+                alert('Sesión cerrada correctamente.');
             } else {
-                const nombre = prompt('Ingresa tu nombre para iniciar sesión:');
-                if (nombre && nombre.trim()) {
-                    currentUser = nombre.trim();
-                    localStorage.setItem('hotelUser', currentUser);
-                    btnLogin.innerHTML = `<i class="fas fa-user-circle mr-1"></i> ${currentUser} (Cerrar)`;
-                } else if (nombre !== null) {
-                    alert('El nombre no puede estar vacío');
+                const name = prompt('✈️ Ingresa tu nombre para disfrutar de ofertas exclusivas:', 'Viajero');
+                if (name && name.trim() !== '') {
+                    currentUser = name.trim();
+                    localStorage.setItem('trivago_user_sim', currentUser);
+                    loginButtonUI.innerHTML = `<i class="fas fa-user-check"></i> ${currentUser.split(' ')[0]}`;
+                    alert(`¡Bienvenido ${currentUser}! Ahora puedes reservar y guardar favoritos.`);
                 }
             }
+            renderHotels(); // Solo para refrescar la interfaz (no necesario, pero actualiza estado)
         }
 
         // Cargar usuario guardado
-        function loadUserFromLocalStorage() {
-            const user = localStorage.getItem('hotelUser');
-            if (user) {
-                currentUser = user;
-                btnLogin.innerHTML = `<i class="fas fa-user-circle mr-1"></i> ${currentUser} (Cerrar)`;
+        function loadUserSession() {
+            const savedUser = localStorage.getItem('trivago_user_sim');
+            if (savedUser) {
+                currentUser = savedUser;
+                loginButtonUI.innerHTML = `<i class="fas fa-user-check"></i> ${currentUser.split(' ')[0]}`;
             }
         }
 
-        // Función para hacer una reserva (POST)
-        async function hacerReserva(roomId, roomName, price) {
+        // ⭐ FUNCIÓN PRINCIPAL DE RESERVA (POST a MongoDB)
+        async function makeReservation(roomId, roomName, pricePerNight) {
             if (!currentUser) {
-                alert('⚠️ Debes iniciar sesión para hacer una reserva.');
+                alert('🔐 Necesitas iniciar sesión para continuar con la reserva.');
                 return;
             }
-            const nombreCliente = prompt('✍️ Ingresa tu nombre completo para la reserva:', currentUser);
-            if (!nombreCliente || nombreCliente.trim() === '') return;
 
-            const reserva = {
+            const guestName = prompt('📝 Completa tu nombre completo para la reserva:', currentUser);
+            if (!guestName || guestName.trim() === '') return;
+
+            const reservationPayload = {
                 roomId: roomId,
-                roomName: roomName,
-                cliente: nombreCliente.trim(),
-                precioNoche: price,
-                fechaReserva: new Date().toISOString()
+                hotelName: roomName,
+                guestName: guestName.trim(),
+                price: pricePerNight,
+                checkIn: new Date().toISOString().split('T')[0], // Fecha simulada de hoy
+                nights: 1
             };
 
             try {
-                const response = await fetch(`${API_BASE}/bookings`, {
+                const response = await fetch(`${API_URL}/bookings`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(reserva)
+                    body: JSON.stringify(reservationPayload)
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
-                    alert(`✅ ¡Reserva confirmada para ${nombreCliente} en ${roomName}! ID: ${data.id || 'generado'}`);
+                    const result = await response.json();
+                    alert(`✅ ¡Reserva confirmada!\nHotel: ${roomName}\nHuésped: ${guestName}\nID de reserva: ${result.id || 'generado'}`);
                 } else {
-                    const errorText = await response.text();
-                    console.error('Error backend:', errorText);
-                    alert(`❌ Error al guardar la reserva. El servidor respondió: ${response.status}. Intenta más tarde.`);
+                    const errorMsg = await response.text();
+                    console.error("Error Backend:", errorMsg);
+                    alert(`❌ El servidor no pudo guardar la reserva. Código: ${response.status}. Verifica tu backend.`);
                 }
             } catch (error) {
-                console.error('Error de red:', error);
-                alert('❌ No se pudo conectar con el servidor de reservas. Verifica que el backend esté corriendo.');
+                console.error("Error de red:", error);
+                alert("❌ No se pudo conectar con el servidor de reservas. Asegúrate de que tu backend en Render esté activo.");
             }
         }
 
-        // Renderizado dinámico con filtros (texto + favoritos)
-        function renderizarHoteles() {
-            if (!allRooms.length) {
-                gridContainer.innerHTML = `<div class="flex flex-col items-center justify-center py-20 text-gray-400">
-                    <i class="fas fa-hotel text-4xl mb-3"></i>
-                    <p>No hay hoteles para mostrar</p>
+        // 🖼️ RENDERIZADO PRINCIPAL (Tarjetas estilo Trivago)
+        function renderHotels() {
+            if (!allHotelsData.length) {
+                resultadosContainer.innerHTML = `<div class="bg-white rounded-2xl p-10 text-center shadow-sm border border-gray-100">
+                    <i class="fas fa-hotel text-4xl text-gray-300 mb-3"></i>
+                    <h3 class="text-lg font-bold text-gray-600">No hay hoteles disponibles</h3>
+                    <p class="text-gray-400 text-sm">Verifica la conexión con tu base de datos.</p>
                 </div>`;
                 return;
             }
 
-            // Aplicar filtros
-            let filtered = [...allRooms];
-
-            // Filtro por texto de destino (coincidencia en nombre o descripción)
-            if (currentFilterText.trim() !== "") {
-                const searchTerm = currentFilterText.trim().toLowerCase();
-                filtered = filtered.filter(room => 
-                    room.name.toLowerCase().includes(searchTerm) || 
-                    (room.description && room.description.toLowerCase().includes(searchTerm))
+            // 1. APLICAR FILTROS
+            let filteredHotels = [...allHotelsData];
+            
+            // Filtro por texto (simulación de destino)
+            if (currentSearchTerm && currentSearchTerm !== "") {
+                const term = currentSearchTerm.toLowerCase();
+                filteredHotels = filteredHotels.filter(hotel => 
+                    hotel.name.toLowerCase().includes(term) || 
+                    (hotel.description && hotel.description.toLowerCase().includes(term))
                 );
             }
-
-            // Filtro solo favoritos
-            if (showOnlyFavs) {
-                filtered = filtered.filter(room => isFavorito(room._id));
+            
+            // Filtro "Solo favoritos"
+            if (showOnlyFavorites) {
+                filteredHotels = filteredHotels.filter(hotel => isFavorite(hotel._id));
+                if(filteredHotels.length === 0 && favoriteIds.length > 0){
+                    resultadosContainer.innerHTML = `<div class="bg-white rounded-2xl p-10 text-center shadow-sm border border-gray-100">
+                        <i class="far fa-heart text-4xl text-red-300 mb-3"></i>
+                        <h3 class="text-lg font-bold text-gray-700">No hay favoritos con este filtro</h3>
+                        <p class="text-gray-500">Prueba desactivando el modo solo favoritos.</p>
+                    </div>`;
+                    return;
+                }
             }
 
-            if (filtered.length === 0) {
-                gridContainer.innerHTML = `<div class="bg-yellow-50 border border-yellow-100 text-yellow-700 p-8 rounded-xl text-center">
-                    <i class="fas fa-search text-2xl mb-2"></i>
-                    <p class="font-bold">No encontramos resultados</p>
-                    <p class="text-sm">Prueba con otro destino o quita el filtro de favoritos</p>
+            if (filteredHotels.length === 0) {
+                resultadosContainer.innerHTML = `<div class="bg-white rounded-2xl p-10 text-center shadow-sm">
+                    <i class="fas fa-map-marked-alt text-4xl text-gray-300 mb-3"></i>
+                    <h3 class="text-lg font-bold">No encontramos resultados para "${currentSearchTerm}"</h3>
+                    <p class="text-gray-500">Prueba con otro destino o elimina el filtro de favoritos.</p>
                 </div>`;
                 return;
             }
 
-            // Generar HTML de las tarjetas
+            // 2. Generar HTML con el diseño moderno de Trivago
             let html = '';
-            filtered.forEach(hab => {
-                const favorito = isFavorito(hab._id);
-                const corazonIcon = favorito ? 'fas fa-heart text-red-500' : 'far fa-heart text-gray-400';
+            filteredHotels.forEach(hotel => {
+                const favClass = isFavorite(hotel._id) ? 'fas fa-heart text-red-500' : 'far fa-heart text-gray-400';
+                const ratingStars = '★★★★'; // Simulación de rating
+                const priceFormatted = new Intl.NumberFormat('es-CO').format(hotel.price);
+                
                 html += `
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col md:flex-row relative group">
-                        <!-- Botón corazón (favoritos) -->
-                        <button class="absolute top-3 right-3 z-10 bg-white/80 backdrop-blur rounded-full p-2 shadow-md heart-hover" onclick="event.stopPropagation(); window.toggleFavoritoWrapper('${hab._id}')">
-                            <i class="${corazonIcon} text-xl"></i>
+                    <div class="hotel-card bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col md:flex-row transition-all duration-300 relative hover:border-blue-200">
+                        <!-- Botón de favoritos (Corazón flotante) -->
+                        <button onclick="window.toggleFavExternal('${hotel._id}')" class="absolute top-4 right-4 z-20 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md heart-hover">
+                            <i class="${favClass} text-xl"></i>
                         </button>
-                        <div class="md:w-72 h-48 md:h-auto relative overflow-hidden">
+                        
+                        <!-- Sección Imagen -->
+                        <div class="md:w-80 h-56 md:h-auto bg-gray-100 relative overflow-hidden">
                             <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600" 
-                                 alt="Hotel" class="w-full h-full object-cover">
-                            <div class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase shadow-sm">
-                                Recomendado
-                            </div>
+                                 alt="Imagen hotel" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                            <div class="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-full">Oferta destacada</div>
                         </div>
 
-                        <div class="p-6 flex-1 flex flex-col justify-between">
+                        <!-- Contenido Principal -->
+                        <div class="p-5 flex-1 flex flex-col justify-between">
                             <div>
-                                <h3 class="text-xl font-extrabold text-gray-900">${escapeHtml(hab.name)}</h3>
-                                <div class="flex items-center gap-1 mt-1 text-orange-400 text-sm">
-                                    ★★★★ <span class="text-gray-400 font-normal ml-2">Excelente ubicación</span>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-xl font-extrabold text-gray-800 hover:text-blue-600 cursor-pointer">${escapeHtml(hotel.name)}</h3>
+                                        <div class="flex items-center gap-1 mt-1">
+                                            <span class="text-orange-400 text-sm">${ratingStars}</span>
+                                            <span class="text-green-700 bg-green-50 px-2 py-0.5 rounded text-xs font-bold ml-2">8.9 Fantástico</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-gray-500 text-sm mt-3 line-clamp-2">
+                                    ${escapeHtml(hotel.description) || 'Disfruta de una estancia excepcional con Wi-Fi de alta velocidad, desayuno incluido y vistas increíbles.'}
+                                </p>
+                                <div class="mt-4 flex flex-wrap gap-2 text-xs text-gray-500">
+                                    <span class="bg-gray-100 px-2 py-1 rounded-full"><i class="fas fa-wifi"></i> WiFi gratis</span>
+                                    <span class="bg-gray-100 px-2 py-1 rounded-full"><i class="fas fa-utensils"></i> Desayuno</span>
                                 </div>
                             </div>
-
-                            <p class="text-gray-500 text-sm mt-3 leading-relaxed">
-                                ${escapeHtml(hab.description || 'Esta habitación cuenta con todas las comodidades modernas, Wi-Fi de alta velocidad y una ubicación privilegiada.')}
-                            </p>
-
-                            <div class="mt-6 flex flex-col md:flex-row md:items-end justify-between border-t border-gray-50 pt-4 gap-4">
-                                <div class="flex flex-col">
-                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Precio por noche</span>
-                                    <span class="text-3xl font-black text-gray-900">$${hab.price.toLocaleString('es-CO')}</span>
+                            
+                            <div class="mt-5 flex flex-col sm:flex-row justify-between items-end gap-3 border-t pt-4">
+                                <div>
+                                    <span class="text-xs text-gray-400 font-bold uppercase tracking-wide">Precio por noche</span>
+                                    <div class="flex items-baseline gap-1">
+                                        <span class="text-3xl font-black text-gray-900">$${priceFormatted}</span>
+                                        <span class="text-gray-400 text-sm">COP</span>
+                                    </div>
+                                    <span class="text-green-600 text-xs font-semibold">+ impuestos incluidos</span>
                                 </div>
-                                <button class="btn-reserva bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow-md shadow-blue-100"
-                                        data-id="${hab._id}" data-name="${escapeHtml(hab.name)}" data-price="${hab.price}">
-                                    Ver oferta
+                                <button onclick="window.reserveExternal('${hotel._id}', '${escapeHtml(hotel.name)}', ${hotel.price})" 
+                                        class="offer-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-100 flex items-center gap-2 transition-all">
+                                    Ver oferta <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 `;
             });
-            gridContainer.innerHTML = html;
-
-            // Asignar eventos a los botones "Ver oferta"
-            document.querySelectorAll('.btn-reserva').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const id = btn.getAttribute('data-id');
-                    const name = btn.getAttribute('data-name');
-                    const price = parseInt(btn.getAttribute('data-price'));
-                    hacerReserva(id, name, price);
-                });
-            });
+            resultadosContainer.innerHTML = html;
         }
 
-        // helper para evitar XSS
+        // Helper para evitar XSS
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/[&<>]/g, function(m) {
@@ -307,68 +367,95 @@
             });
         }
 
-        // Cargar hoteles desde el backend
-        async function cargarHabitaciones() {
+        // ################ CONEXIÓN CON EL BACKEND (MongoDB Atlas vía Render) ################
+        async function fetchHotelsFromBackend() {
             try {
-                const respuesta = await fetch(`${API_BASE}/rooms`);
-                if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-                const datos = await respuesta.json();
-                allRooms = datos;
-                renderizarHoteles();
-            } catch (error) {
-                console.error("Error al cargar habitaciones:", error);
-                gridContainer.innerHTML = `
-                    <div class="bg-red-50 border border-red-100 text-red-600 p-8 rounded-xl text-center">
-                        <i class="fas fa-exclamation-triangle text-3xl mb-2"></i>
-                        <p class="font-bold">❌ Error al conectar con el servidor</p>
-                        <p class="text-sm mt-2">Verifica que tu backend en Render esté activo y la URL sea correcta.</p>
-                        <p class="text-xs mt-1 text-red-400">${API_BASE}/rooms no responde</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Función para aplicar filtro desde el input o botón buscar
-        function aplicarFiltro() {
-            currentFilterText = destinoInput.value;
-            renderizarHoteles();
-        }
-
-        // Alternar modo "solo favoritos"
-        function toggleFavoritosMode() {
-            if (showOnlyFavs) {
-                showOnlyFavs = false;
-                btnFavoritos.innerHTML = '<i class="fas fa-heart mr-1 text-red-500"></i> Favoritos';
-                btnFavoritos.classList.remove('bg-red-50', 'text-red-600');
-                btnFavoritos.classList.add('text-gray-600', 'hover:text-blue-600');
-            } else {
-                showOnlyFavs = true;
-                btnFavoritos.innerHTML = '<i class="fas fa-heart-broken mr-1"></i> Mostrar todos';
-                btnFavoritos.classList.add('bg-red-50', 'text-red-600');
-                btnFavoritos.classList.remove('text-gray-600', 'hover:text-blue-600');
-                if (favoriteIds.length === 0) {
-                    alert('Aún no tienes hoteles favoritos. Haz clic en el ❤️ de alguna tarjeta para agregarlos.');
+                resultadosContainer.innerHTML = `<div class="flex flex-col items-center justify-center py-20 text-gray-400 bg-white rounded-2xl shadow-sm">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+                    <p class="font-medium">Conectando con servidor seguro...</p>
+                </div>`;
+                
+                const response = await fetch(`${API_URL}/rooms`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                
+                if (Array.isArray(data) && data.length > 0) {
+                    allHotelsData = data;
+                } else {
+                    // Datos de respaldo (mock) en caso de que la BD esté vacía, pero la conexión funciona
+                    console.warn("La base de datos devolvió un array vacío. Usando datos de muestra.");
+                    allHotelsData = [
+                        { _id: "1", name: "Hotel Casa Real Popayán", description: "Ubicado en el centro histórico, cerca del parque Caldas.", price: 280000 },
+                        { _id: "2", name: "Hotel Dann Monasterio", description: "Antiguo convento del siglo XVI, piscina y spa.", price: 450000 },
+                        { _id: "3", name: "NH Popayán Royal", description: "Moderno con vistas a la ciudad.", price: 320000 }
+                    ];
                 }
+                renderHotels();
+            } catch (error) {
+                console.error("Fallo crítico al obtener datos del backend:", error);
+                resultadosContainer.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
+                    <i class="fas fa-database text-4xl text-red-400 mb-3"></i>
+                    <p class="font-bold text-red-700">⚠️ Error de conexión con el servidor</p>
+                    <p class="text-sm text-red-600 mt-2">Verifica que tu servidor en Render esté activo y la URL sea correcta.</p>
+                    <p class="text-xs text-gray-500 mt-4">Endpoint consultado: ${API_URL}/rooms</p>
+                </div>`;
             }
-            renderizarHoteles();
         }
 
-        // Exponer toggleFavorito globalmente para usarlo desde el onclick inline
-        window.toggleFavoritoWrapper = (roomId) => {
-            toggleFavorito(roomId);
-            renderizarHoteles(); // refrescar para cambiar el corazón
+        // ############### FUNCIONES GLOBALES PARA LOS BOTONES DINÁMICOS ################
+        window.toggleFavExternal = (roomId) => {
+            toggleFavorite(roomId);
+            renderHotels(); // Refresca la vista para cambiar el corazón visual
+        };
+        
+        window.reserveExternal = (roomId, hotelName, price) => {
+            makeReservation(roomId, hotelName, price);
         };
 
-        // ---------- EVENTOS Y ARRANQUE ----------
-        destinoInput.addEventListener('input', () => aplicarFiltro());
-        btnBuscar.addEventListener('click', () => aplicarFiltro());
-        btnFavoritos.addEventListener('click', toggleFavoritosMode);
-        btnLogin.addEventListener('click', handleLogin);
+        // Función para filtrar por texto y aplicar búsqueda simulada
+        function performSearch() {
+            currentSearchTerm = searchInput.value.trim() !== "" ? searchInput.value.trim() : "Popayán, Colombia";
+            if(showOnlyFavorites) {
+                // Si el modo favoritos está activo, mantenemos el filtro pero en favoritos.
+                renderHotels();
+            } else {
+                renderHotels();
+            }
+        }
 
-        // Cargar datos iniciales
-        loadFavoritesFromLocalStorage();
-        loadUserFromLocalStorage();
-        cargarHabitaciones();
+        // Alternar modo favoritos (toggle)
+        function toggleFavMode() {
+            if (showOnlyFavorites) {
+                showOnlyFavorites = false;
+                favButtonUI.innerHTML = '<i class="far fa-heart text-red-400"></i> Favoritos';
+                favButtonUI.classList.remove('bg-blue-50');
+            } else {
+                showOnlyFavorites = true;
+                favButtonUI.innerHTML = '<i class="fas fa-heart-broken"></i> Mostrar todos';
+                favButtonUI.classList.add('bg-blue-50');
+                if(favoriteIds.length === 0) alert('Todavía no tienes hoteles favoritos. Haz click en el corazón ❤️ de alguna tarjeta.');
+            }
+            renderHotels();
+        }
+
+        // ################ EVENTOS Y ARRANQUE ################
+        function initEventListeners() {
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') performSearch(); });
+            favButtonUI.addEventListener('click', toggleFavMode);
+            loginButtonUI.addEventListener('click', handleLogin);
+        }
+
+        // Inicialización de la aplicación
+        function initApp() {
+            loadFavorites();
+            loadUserSession();
+            initEventListeners();
+            fetchHotelsFromBackend();
+        }
+
+        // Arrancar todo
+        initApp();
     </script>
 </body>
 </html>
