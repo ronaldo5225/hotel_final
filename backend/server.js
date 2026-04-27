@@ -15,7 +15,7 @@ app.use(express.json());
 // Importar rutas
 const bookingRoutes = require('./routes/bookingRoutes');
 const roomRoutes = require('./routes/roomRoutes');
-
+const userRoutes = require('./routes/userRoutes');
 // Conexión a MongoDB
 const connectDB = async () => {
   try {
@@ -32,7 +32,7 @@ connectDB();
 // Rutas
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/rooms', roomRoutes);
-
+app.use('/api/users', userRoutes);
 // Ruta de prueba
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API funcionando correctamente' });
