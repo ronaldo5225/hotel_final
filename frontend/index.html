@@ -907,54 +907,64 @@
         document.getElementById('auth-subtitle').textContent = isLogin ? 'Bienvenido de nuevo' : 'Crea tu cuenta gratis';
     }
 
-    function hacerLogin() {
-        const email = document.getElementById('login-email').value.trim();
-        const pass = document.getElementById('login-pass').value;
+    async function hacerLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value;
 
-        if (!email || !pass) { mostrarToast('⚠️ Completa todos los campos'); return; }
+    if (!email || !pass) { mostrarToast('⚠️ Completa todos los campos'); return; }
 
-        // Buscar usuario guardado
-        const usuarios = JSON.parse(localStorage.getItem('noe_usuarios') || '[]');
-        const usuario = usuarios.find(u => u.email === email && u.pass === pass);
+    try {
+        const res = await fetch('https://hotel-final-j681.onrender.com/api/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password: pass })
+        });
+        const datos = await res.json();
 
-        if (!usuario) {
-            mostrarToast('❌ Email o contraseña incorrectos');
-            return;
-        }
+        if (!res.ok) { mostrarToast('❌ ' + datos.error); return; }
 
-        usuarioActual = { nombre: usuario.nombre, email: usuario.email };
+        usuarioActual = datos.usuario;
         localStorage.setItem('noe_usuario', JSON.stringify(usuarioActual));
         cerrarModal('modal-auth');
         actualizarUI();
-        mostrarToast(`👋 Hola, ${usuario.nombre}!`);
+        mostrarToast(`👋 Hola, ${datos.usuario.nombre}!`);
+    } catch (e) {
+        mostrarToast('❌ Error al conectar con el servidor');
     }
+}
+    
 
-    function hacerRegistro() {
-        const nombre = document.getElementById('reg-nombre').value.trim();
-        const email = document.getElementById('reg-email').value.trim();
-        const pass = document.getElementById('reg-pass').value;
-        const pass2 = document.getElementById('reg-pass2').value;
+    async function hacerRegistro() {
+    const nombre = document.getElementById('reg-nombre').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+    const pass2 = document.getElementById('reg-pass2').value;
 
-        if (!nombre || !email || !pass) { mostrarToast('⚠️ Completa todos los campos'); return; }
-        if (!email.includes('@')) { mostrarToast('⚠️ Email inválido'); return; }
-        if (pass.length < 6) { mostrarToast('⚠️ La contraseña debe tener al menos 6 caracteres'); return; }
-        if (pass !== pass2) { mostrarToast('⚠️ Las contraseñas no coinciden'); return; }
+    if (!nombre || !email || !pass) { mostrarToast('⚠️ Completa todos los campos'); return; }
+    if (!email.includes('@')) { mostrarToast('⚠️ Email inválido'); return; }
+    if (pass.length < 6) { mostrarToast('⚠️ Mínimo 6 caracteres'); return; }
+    if (pass !== pass2) { mostrarToast('⚠️ Las contraseñas no coinciden'); return; }
 
-        const usuarios = JSON.parse(localStorage.getItem('noe_usuarios') || '[]');
-        if (usuarios.find(u => u.email === email)) {
-            mostrarToast('⚠️ Este email ya está registrado');
-            return;
-        }
+    try {
+        const res = await fetch('https://hotel-final-j681.onrender.com/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, email, password: pass })
+        });
+        const datos = await res.json();
 
-        usuarios.push({ nombre, email, pass });
-        localStorage.setItem('noe_usuarios', JSON.stringify(usuarios));
+        if (!res.ok) { mostrarToast('❌ ' + datos.error); return; }
 
-        usuarioActual = { nombre, email };
+        usuarioActual = datos.usuario;
         localStorage.setItem('noe_usuario', JSON.stringify(usuarioActual));
         cerrarModal('modal-auth');
         actualizarUI();
         mostrarToast(`🎉 ¡Bienvenido, ${nombre}!`);
+    } catch (e) {
+        mostrarToast('❌ Error al conectar con el servidor');
     }
+}
+    
 
     function abrirPerfil() {
         if (!usuarioActual) return;
