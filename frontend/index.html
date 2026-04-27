@@ -266,7 +266,7 @@
             if (currentSearchTerm && currentSearchTerm !== "") {
                 const term = currentSearchTerm.toLowerCase();
                 filteredHotels = filteredHotels.filter(hotel => 
-                    hotel.name.toLowerCase().includes(term) || 
+                    hotel.name?.toLowerCase().includes(term) || 
                     (hotel.description && hotel.description.toLowerCase().includes(term))
                 );
             }
