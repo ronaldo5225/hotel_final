@@ -178,7 +178,7 @@ PORT=5000
 ```bash
 node server.js
 ```
-El servidor correrá en `http://localhost:5000`
+El servidor correrá en `http://127.0.0.1:8080`
 
 ### 4. Abrir el frontend
 Abre el archivo `frontend/index.html` en tu navegador, o usa Live Server en VS Code.
